@@ -9,6 +9,8 @@ import aiRouter from "./routers/aiRoutes.js";
 const app=express();
 const PORT=process.env.PORT||3000;
 
+const DB=process.env.MONGODB_URI ;
+
 //Databade connection
 await connectDB();
 
