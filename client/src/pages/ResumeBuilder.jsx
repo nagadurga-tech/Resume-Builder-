@@ -116,7 +116,7 @@ const ResumeBuilder = () => {
   const saveResume=async()=>{
     try{
       let updatedResumeData=structuredClone(resumeData)
-      //remove image from updatedResumeData
+
       if(typeof resumeData.personal_info.image==='object'){
         delete updatedResumeData.personal_info.image
       }
@@ -127,7 +127,7 @@ const ResumeBuilder = () => {
       typeof resumeData.personal_info.image==='object' && formData.append('image',
         resumeData.personal_info.image)
 
-        const{data}=await api.put('/api/resumes/update',formData) //,{headers:{Authorization:`Bearer ${token}`}}
+        const{data}=await api.put('/api/resumes/update',formData) 
         setResumeData(data.resume)
         toast.success(data.message)
     }catch(error){
@@ -184,7 +184,7 @@ const ResumeBuilder = () => {
                 </div>
               </div>
 
-                {/* From Content */}
+              
               <div className="space-y-6">
                 {activeSection.id === 'personal' && (
                 <PersonalInfoForm
@@ -217,7 +217,6 @@ const ResumeBuilder = () => {
                   <SkillForm data={resumeData.skills}
                   onChange={(data)=>setResumeData(prev=>({...prev,skills:data}))}/>
                 )}
-                {/* Other sections like Education, Projects, Skills can be added similarly */}
               </div>
               <button onClick={()=>{toast.promise(saveResume,{loading:'Saving..'})}}
               className="bg-gradient-to-br from-blue-100 to-blue-200 ring-blue-300 text-blue-600 ring hover:ring-blue-400 transition-all rounded-md px-6 py-2 mt-6 text-sm">
@@ -244,7 +243,6 @@ const ResumeBuilder = () => {
                       </button>
                     </div>
                   </div>
-                  {/**button */}
                 </div>
 
                 {/**resume preview */}
@@ -253,8 +251,6 @@ const ResumeBuilder = () => {
           </div>
         </div>
       </div>
-
-
     </div>
   )
 }

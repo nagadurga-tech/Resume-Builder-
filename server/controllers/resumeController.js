@@ -1,6 +1,8 @@
 import Resume from "../models/Resume.js";
 import imagekit from "../configs/imageKit.js";
 import fs from "fs";
+
+
 //controller for creating a new resume
 //POST:/api/resumes/create
 export const createResume=async(req,res)=>{
@@ -8,9 +10,7 @@ export const createResume=async(req,res)=>{
         const userId=req.userId
         const {title,parsedData}=req.body
 
-        //create new resume
         const newResume=await Resume.create({userId,title,...parsedData})
-        //return success message
         return res.status(201).json({message:'resume created successfully',resume:newResume})
     }catch(error){
         return res.status(400).json({message:error.message})
@@ -26,8 +26,6 @@ export const deleteResume=async(req,res)=>{
         const userId=req.userId
         const {resumeId}=req.params;
         await Resume.findOneAndDelete({userId,_id:resumeId})
-
-        //return success message
         return res.status(200).json({message:'resume deleted successfully'})
     }catch(error){
         return res.status(400).json({message:error.message})
@@ -43,7 +41,7 @@ export const getResumeById=async(req,res)=>{
         const {resumeId}=req.params;
         const resume =await Resume.findOne({userId,_id:resumeId})
         if(!resume){
-            return  res.status(404).json({message:'resume not found'})
+            return res.status(404).json({message:'resume not found'})
         }
         resume.__v=undefined;
         resume.createdAt=undefined;
@@ -71,6 +69,8 @@ export const getPublicResumeById=async(req,res)=>{
         return res.status(400).json({message:error.message})
     }
 }
+
+
 //controller for updating resume
 //PUT:/api/resumes/update/:resumeId
 export const updateResume=async(req,res)=>{

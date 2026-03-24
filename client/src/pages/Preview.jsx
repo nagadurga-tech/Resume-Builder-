@@ -9,7 +9,6 @@ import api from '../configs/api.js'
 const Preview = () => {
 
   const{resumeId}=useParams();
-  
   const [isLoading,setIsLoading]=useState(true);
   const[resumeData,setResumeData]=useState(null);
 

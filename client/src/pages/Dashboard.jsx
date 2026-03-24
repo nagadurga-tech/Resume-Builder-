@@ -4,16 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import api from '../configs/api';
-import pdfToText from 'react-pdftotext';
+import * as pdfjsLib from "pdfjs-dist";
+import pdfWorker from "pdfjs-dist/build/pdf.worker?url";
 
-
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 const Dashboard = () => {
-
-
   const {users,token} =useSelector(state=>state.auth);
-
-
   const colors = ['#9333ea', '#d97706', '#dc2626', '#0284c7', '#16a34a'];
   const [showCreateResumes, setShowCreateResumes] = useState(false);
   const [allResumes, setAllResumes] = useState([]);
@@ -24,6 +21,32 @@ const Dashboard = () => {
   const [isLoading,setIsLoading]=useState(false);
 
   const navigate = useNavigate();
+  const extractTextFromPDF = async (file) => {
+  const reader = new FileReader();
+
+  return new Promise((resolve, reject) => {
+    reader.onload = async () => {
+      try {
+        const typedArray = new Uint8Array(reader.result);
+        const pdf = await pdfjsLib.getDocument(typedArray).promise;
+
+        let text = "";
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          const strings = content.items.map(item => item.str);
+          text += strings.join(" ") + " ";
+        }
+        resolve(text);
+      } catch (error) {
+        reject(error);
+      }
+    };
+
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+};
 
   const loadAllResumes = async () => {
     try{
@@ -49,19 +72,45 @@ const Dashboard = () => {
 
   const uploadResume = async (event) => {
     event.preventDefault();
-
-
+    if(!resume){
+      toast.error("Please select a pdf file");
+      return;
+    }
+    if(!title.trim()){
+      toast.error("Please enter a title for the resume");
+      return;
+    }
     setIsLoading(true);
-
     try{
-      const resumeText =await pdfToText(resume)
+      let resumeText='';
+    
+    try{
+       resumeText =await extractTextFromPDF(resume)
+    }catch(error){
+      console.error("PDF parsing error:", error);
+      toast.error("Failed to read PDF file");
+      setIsLoading(false);
+      return;
+    }
+    if (!resumeText || resumeText.trim().length === 0) {
+      toast.error("PDF content is empty or unreadable");
+      setIsLoading(false);
+      return;
+    }
 
-      const {data}=await api.post('/api/ai/upload-resume',{title,resumeText},{headers:{Authorization:`Bearer ${token}`}});
+    if (resumeText.length < 30) {
+      toast.error("PDF text too small or unreadable");
+      setIsLoading(false);
+      return;
+    }
+    const {data}=await api.post('/api/ai/upload-resume',{title,resumeText},{headers:{Authorization:`Bearer ${token}`}});
     setTitle('')
     setResume(null)
     setShowUploadResumes(false)
+
     navigate(`/app/builder/${data.resume._id}`)
     }catch(error){
+      console.log("FULL ERROR:", error.response?.data);
       toast.error(error?.response?.data?.message||error.message)
     }finally{
     setIsLoading(false);
@@ -135,7 +184,7 @@ const Dashboard = () => {
             const baseColor = colors[index % colors.length];
             return (
               <button
-                key={resume.id || index}
+                key={resume._id}
                 onClick={() => navigate(`/app/builder/${resume._id}`)}
                 className="relative w-full sm:max-w-36 h-48 flex flex-col items-center justify-center rounded-lg gap-2 border group hover:shadow-lg transition-all duration-300 cursor-pointer"
                 style={{
@@ -148,13 +197,14 @@ const Dashboard = () => {
                   className="text-sm group-hover:scale-105 transition-all duration-300 px-2 text-center"
                   style={{ color: baseColor }}
                 >
-                  {resume.title}
+                  {resume.title || 'Untitled Resume'}
                 </p>
                 <p
                   className="absolute bottom-1 text-[11px] text-slate-400 group-hover:text-slate-500 transition-all duration-300 px-2 text-center"
                   style={{ color: baseColor + '90' }}
                 >
-                  Updated on {new Date(resume.updatedAt).toLocaleDateString()}
+                  Updated on {resume?.updatedAt
+                  ? new Date(resume.updatedAt).toLocaleDateString(): "N/A"}
                 </p>
 
                 <div
@@ -224,8 +274,7 @@ const Dashboard = () => {
               className="relative bg-slate-50 border shadow-md rounded-lg w-full max-w-sm p-6"
             >
               <h2 className="text-xl font-semibold mb-4 text-slate-700">Upload Resume</h2>
-              <input
-                
+              <input   
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
                 type="text"
@@ -233,8 +282,6 @@ const Dashboard = () => {
                 className="w-full px-4 py-2 mb-4 border rounded focus:outline-none focus:border-blue-600 ring-blue-600"
                 required
               />
-
-              
                 <label htmlFor="resume-input" className="block cursor-pointer text-sm text-slate-700">
                   Select resume file
                   <div className="flex flex-col items-center justify-center gap-2 border group text-slate-400 border-blue-500 hover:text-blue-700 cursor-pointer transition-colors p-4 rounded">
@@ -248,11 +295,18 @@ const Dashboard = () => {
                     )}
                   </div>
                 </label>
-                <input id="resume-input" type="file" accept=".pdf" hidden
-                  onChange={(e) => {
-                    setResume(e.target.files[0]);}}/>
-                
-
+                <input  id="resume-input" type="file" accept="application/pdf" className="hidden"
+                onChange={(e) => { const file = e.target.files[0];
+                 if (!file) return;
+                  const isPDF =
+                  file.type === "application/pdf" ||
+                  file.name.toLowerCase().endsWith(".pdf");
+                if (!isPDF) {
+                  toast.error("Only PDF files are allowed");
+                  return;
+                }
+                setResume(file);
+              }}/>
               <button type="submit" disabled={isLoading} className="w-full py-2 mt-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
                 {isLoading && <LoaderCircle className='animate-spin size-4 text-white'/>}
                 {isLoading ? 'uploading..':'Upload Resume'}

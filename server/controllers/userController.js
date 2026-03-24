@@ -14,13 +14,10 @@ const generateToken=(userId)=>{
 export const registerUser=async(req,res)=>{
     try{
         const{name,email,password}=req.body;
-
-        //check if required fields are present
         if(!name || !email || !password){
             return res.status(400).json({message:'Missing required fields'})
         }
         
-        //check if user already exists
         const user=await User.findOne({email})
         if(user){
             return res.status(400).json({message:'User already exists'})
@@ -48,20 +45,14 @@ export const registerUser=async(req,res)=>{
 export const loginUser=async(req,res)=>{
     try{
         const {email,password} = req.body;
-        
-        //check if user exists
         const user=await User.findOne({email})
         if(!user){
             return res.status(400).json({message:'Invalid email or password'})
         }
-
-        //check if password is correct
         if(!user.comparePassword(password)){
             return res.status(400).json({message:'Invalid email or password'})
         }
 
-        
-        //return success message
         const token=generateToken(user._id)
         user.password=undefined;
 
@@ -83,7 +74,6 @@ export const getUserById =async(req,res)=>{
         if(!user){
             return res.status(404).json({message:'User not found'})
         }
-        //return user
         user.password=undefined;
         return res.status(200).json({user})
 

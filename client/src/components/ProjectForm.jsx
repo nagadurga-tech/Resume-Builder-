@@ -3,16 +3,6 @@ import React from "react";
 
 const ProjectForm = ({ data = [], onChange }) => {
 
-  // const addProject = () => {
-  //   const newProject = {
-  //     title: "",
-  //     description: "",
-  //     technologies: "",
-  //     link: "",
-  //   };
-  //   onChange([...data, newProject]);
-  // };
-
    const addProject = () => {
     onChange([
       ...data,
@@ -38,7 +28,6 @@ const ProjectForm = ({ data = [], onChange }) => {
 
   return (
     <div className="space-y-6">
-
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h3 className="flex items-center gap-2 text-lg font-semibold text-gray-900">

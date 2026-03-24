@@ -18,15 +18,10 @@ const Navbar = () => {
     <header className="shadow-sm top-0 z-50 bg-white ">
       <nav className="max-w-7xl mx-auto h-16 px-4 sm:px-6 flex items-center justify-between">
 
-        {/* LOGO */}
         <Link to="/" className="flex items-center gap-2">
           <img src="/logo1.png" alt="logo" className="h-8 w-auto" />
         </Link>
-
-        {/* RIGHT SECTION */}
         <div className="flex items-center gap-3 sm:gap-5">
-
-          {/* USER NAME */}
           <div className="hidden sm:flex items-center gap-2 text-sm text-gray-600">
             <User className="w-4 h-4" />
             <span>
@@ -36,8 +31,6 @@ const Navbar = () => {
               </span>
             </span>
           </div>
-
-          {/* LOGOUT BUTTON */}
           <button
             onClick={logoutUser}
             className="flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full
@@ -55,8 +48,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-
-// <header className="shadow-sm h-15 bg-white items-center">

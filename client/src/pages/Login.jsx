@@ -15,8 +15,6 @@ const Login = () => {
   const urlState = query.get("state");
   const [state,setState]=React.useState(urlState||"login");
 
-  // const [mode, setMode] = useState(urlState === "register" ? "register" : "login");
-
   const [formData, setFormData] = React.useState({
     name: '',
     email: '',
@@ -36,19 +34,6 @@ const Login = () => {
     }
     console.log("Form submitted:",formData)
   }
-
-  //   if (mode === "login") {
-  //     alert(`Logging in as ${formData.email}`);
-  //   } else {
-  //     alert(`Signing up user ${formData.name}`);
-  //   }
-
-  //   console.log("Form submitted:", formData);
-  //   if(formData.email && formData.password){
-  //     navigate('/app');
-  //   }
-  // };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));

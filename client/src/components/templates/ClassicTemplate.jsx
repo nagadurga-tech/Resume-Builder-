@@ -14,7 +14,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
     <div className="max-w-4xl mx-auto bg-white text-gray-800 leading-relaxed
       p-4 sm:p-6 md:p-8">
 
-      {/* ===== HEADER ===== */}
+      {/* HEADER */}
       <header
         className="text-center mb-6 pb-4 border-b-2"
         style={{ borderColor: accentColor }}
@@ -64,7 +64,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
         </div>
       </header>
 
-      {/* ===== SUMMARY ===== */}
+      {/*SUMMARY */}
       {data.professional_summary && (
         <section className="mb-6">
           <h2
@@ -77,7 +77,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
         </section>
       )}
 
-      {/* ===== EXPERIENCE ===== */}
+      {/*EXPERIENCE*/}
       {data.experience?.length > 0 && (
         <section className="mb-6">
           <h2
@@ -116,7 +116,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
         </section>
       )}
 
-      {/* ===== PROJECTS (FIXED) ===== */}
+      {/*PROJECTS*/}
       {data.projects?.length > 0 && (
         <section className="mb-6">
           <h2
@@ -159,7 +159,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
         </section>
       )}
 
-      {/* ===== EDUCATION ===== */}
+      {/*EDUCATION*/}
       {data.education?.length > 0 && (
         <section className="mb-6">
           <h2
@@ -193,7 +193,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
         </section>
       )}
 
-      {/* ===== SKILLS ===== */}
+      {/*SKILLS*/}
       {data.skills?.length > 0 && (
         <section>
           <h2

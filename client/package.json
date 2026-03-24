@@ -14,7 +14,7 @@
     "@tailwindcss/vite": "^4.1.14",
     "axios": "^1.13.2",
     "lucide-react": "^0.546.0",
-    "pdfjs-dist": "^5.4.624",
+    "pdfjs-dist": "^3.11.174",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hot-toast": "^2.6.0",

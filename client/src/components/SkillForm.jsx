@@ -2,7 +2,6 @@ import { Plus,Sparkle,X } from 'lucide-react';
 import React, { useState } from 'react'
 
 const SkillForm = ({data=[],onChange}) => {
-
     const [newSkill,setNewSkill]=useState("");
     const addSkill=()=>{
         if(newSkill.trim()&&!data.includes(newSkill.trim())){
@@ -22,7 +21,7 @@ const SkillForm = ({data=[],onChange}) => {
             addSkill();
         }
     }
-
+    
   return (
     <div className="space-y-4">
         <div>
@@ -48,7 +47,6 @@ const SkillForm = ({data=[],onChange}) => {
                             <X className="w-3 h-3"/>
                         </button>
                     </span>
-
                 ))}
             </div>
         ):(
@@ -57,16 +55,12 @@ const SkillForm = ({data=[],onChange}) => {
                 <p>No skills add yet</p>
                 <p className="text-sm">Add your technical and skills above.</p>
             </div>
-
         )}
-
         <div className="bg-green-50 border border-green-100 p-4 rounded-xl">
             <p className="text-sm text-green-800"><strong>Tip:</strong>Add 8-12 relevant skills. INclude both technical skills
             (programming languages,tools)and soft skills(leadership,communication).</p>
         </div>
-
     </div>
   )
 }
-
 export default SkillForm

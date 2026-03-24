@@ -1,8 +1,8 @@
 import React from 'react'
-import ClassicTemplate from './Templates/ClassicTemplate'
-import ModernTemplate from './Templates/ModernTemplate'
-import MinimalTemplate from './Templates/MinimalTemplate'
-import MinimalImageTemplate from './Templates/MinimalImageTemplate'
+import ClassicTemplate from './templates/ClassicTemplate'
+import ModernTemplate from './templates/ModernTemplate'
+import MinimalTemplate from './templates/MinimalTemplate'
+import MinimalImageTemplate from './templates/MinimalImageTemplate'
 
 const ResumePreview = ({ data, template, accentColor, classes = "" }) => {
 
@@ -21,8 +21,6 @@ const ResumePreview = ({ data, template, accentColor, classes = "" }) => {
 
   return (
     <div className="w-full min-h-screen bg-gray-100 flex justify-center px-2 sm:px-4 md:px-8 py-4">
-      
-      {/* Resume Wrapper */}
       <div
         id="resume-preview"
         className={`

@@ -25,11 +25,8 @@ const EducationForm = ({data=[],onChange}) => {
         onChange(updated)
     }
 
-
-
   return (
     <div className='space-y-6'>
-      
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
                 <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2 6">Education</h3>
@@ -62,11 +59,6 @@ const EducationForm = ({data=[],onChange}) => {
                                 <input value={education.field|| ""} onChange={(e)=>updateEducation(index,"field",e.target.value)} type="text"placeholder='Field of Study' className='px-3 py-2 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none'/>
                                 <input value={education.graduation_date|| ""} onChange={(e)=>updateEducation(index,"graduation_date",e.target.value)} type="month"  className='px-3 py-2 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none'/>
                             </div>
-
-                            
-                               
-                           
-
 
                         </div>
                     ))}

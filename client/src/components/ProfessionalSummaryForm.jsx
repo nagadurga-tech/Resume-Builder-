@@ -32,24 +32,18 @@ const ProfessionalSummaryForm = ({data,onChange,setResumeData}) => {
                 Skilled in core technical skills with hands-on project experience.
                 Quick learner with a passion for problem-solving and growth.
                 Eager to contribute effectively to a team environment."
-
                 User input:
                 "${data}"
                 Return ONLY the enhanced summary text.`;
 
         const response=await api.post('/api/ai/enhance-pro-sum',{userContent:prompt},{headers:{Authorization:`Bearer ${token}`}})
-
         const enhancedText=response?.data?.enhancedContent;
         if(!enhancedText){
             toast.error("AI did not return summary");
-            return
-            
+            return;   
         }
-        
-        // setResumeData(prev=>({...prev, professional_summary: response.data.enhancedContent,}))
         setResumeData(prev=>({...prev, professional_summary: enhancedText,}))
         onChange(enhancedText)
-
         }catch(error){
             toast.error(error?.response?.data?.message||error.message)
         }finally{

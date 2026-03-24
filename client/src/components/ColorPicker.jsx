@@ -33,7 +33,6 @@ const ColorPicker = ({ selectedColor, onChange }) => {
                         {selectedColor===color.value &&(
                             <div className="absolute insert-0 flex items-center justify-center">
                                 <Check className='w-5 h-5 text-white'/>
-
                             </div>
                         )}
                         <p className="text-xs text-center mt-1 text-gray-600">{color.name}</p>

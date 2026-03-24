@@ -51,12 +51,7 @@ const ExperienceForm = ({data,onChange}) => {
                             User description:"${experience.description || ''}"
                             Return ONLY the enhanced job description text.`
 
-            // const{data}=await api.post('/api/ai/enhance-job-desc',{userContent:prompt},
-            //     {headers:{Authorization:token}})
-            //     updateExperience(index,'description',data.enhancedContent)
-
-            const res = await api.post(
-        '/api/ai/enhance-job-desc',
+            const res = await api.post('/api/ai/enhance-job-desc',
         { userContent: prompt },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -69,11 +64,9 @@ const ExperienceForm = ({data,onChange}) => {
         }
     }
 
-
   return (
     <div className='space-y-6'>
-
-             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
                 <h3 className=" text-lg font-semibold text-gray-900">Professional Experience</h3>
                 <p className="text-sm text-gray-500">Add your job experience</p>

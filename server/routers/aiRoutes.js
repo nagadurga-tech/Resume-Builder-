@@ -2,7 +2,6 @@ import express from "express";
 import protect from "../middlewares/authMiddleware.js";
 import {enhanceJobDescription,enhanceProfessionalSummary,uploadResume} from "../configs/aiController.js";
 
-
 const aiRouter=express.Router();
 
 aiRouter.post('/enhance-pro-sum',protect,enhanceProfessionalSummary);
