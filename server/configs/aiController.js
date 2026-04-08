@@ -1,6 +1,30 @@
 import Resume from "../models/Resume.js";
 import ai from "../configs/ai.js"
 
+// NEW SAFE FUNCTION WITH RETRY
+async function safeAIRequest(prompt) {
+  let retries = 2;
+  while (retries > 0) {
+    try {
+      const response = await ai.responses.create({
+        model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
+        input: prompt,
+      });
+
+      return response.output_text;
+    } catch (err) {
+      if (err.status === 429) {
+        console.log("⚠️ Rate limit hit. Retrying in 2 sec…");
+        await new Promise((r) => setTimeout(r, 2000));
+        retries--;
+      } else {
+        throw err;
+      }
+    }
+  }
+  throw new Error("AI rate limit — try again later");
+}
+
 export const enhanceProfessionalSummary = async (req, res) => {
   try {
     const { userContent } = req.body;
@@ -9,23 +33,17 @@ export const enhanceProfessionalSummary = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const response = await ai.chat.completions.create({
-      model: process.env.OPENAI_MODEL,
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an expert resume writer. Improve the given summary into a 1–2 sentence, ATS-friendly, professional summary.",
-        },
-        {
-          role: "user",
-          content: userContent,
-        },
-      ],
-    });
+    const prompt = `
+You are an expert resume writer.
+Rewrite this into a clean, ATS-friendly professional summary. Keep it 1–2 sentences.
 
-    const enhancedSummary = response.choices[0].message.content.trim();
-    return res.status(200).json({ enhancedContent: enhancedSummary });
+Text:
+${userContent}
+    `;
+
+    const enhanced = await safeAIRequest(prompt);
+
+    return res.status(200).json({ enhancedContent: enhanced.trim() });
   } catch (error) {
     console.error("AI Summary Error:", error);
     return res.status(500).json({ message: "AI Server Error" });
@@ -42,20 +60,17 @@ export const enhanceJobDescription = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const response = await ai.chat.completions.create({
-      model: process.env.OPENAI_MODEL,
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an expert resume writer. Improve the job description into a short 1–2 sentence ATS-friendly bullet.",
-        },
-        { role: "user", content: userContent },
-      ],
-    });
+    const prompt = `
+You are an expert resume writer.
+Convert this job description into a short 1–2 sentence ATS-friendly bullet.
 
-    const enhanced = response.choices[0].message.content.trim();
-    return res.status(200).json({ enhancedContent: enhanced });
+Text:
+${userContent}
+    `;
+
+    const enhanced = await safeAIRequest(prompt);
+
+    return res.status(200).json({ enhancedContent: enhanced.trim() });
   } catch (error) {
     console.error("Job Desc Error:", error);
     return res.status(500).json({ message: "AI Server Error" });
