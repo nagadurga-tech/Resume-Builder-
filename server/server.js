@@ -18,8 +18,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://resume-builder-git-main-nagadurga-techs-projects.vercel.app",  
-      "https://resume-builder-eosin-kappa.vercel.app" 
+      "https://resume-builder-git-main-nagadurga-techs-projects.vercel.app",
+      "https://resume-builder-eosin-kappa.vercel.app",
+      "https://resume-builder-j2c5eij36-nagadurga-techs-projects.vercel.app"
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
