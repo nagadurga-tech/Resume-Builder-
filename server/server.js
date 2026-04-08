@@ -19,7 +19,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "https://resume-builder-git-main-nagadurga-techs-projects.vercel.app",  
-      "https://resume-builder.vercel.app" 
+      "https://resume-builder-eosin-kappa.vercel.app" 
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
