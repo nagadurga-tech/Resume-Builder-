@@ -7,14 +7,14 @@ async function safeAIRequest(prompt) {
   while (retries > 0) {
     try {
       const response = await ai.responses.create({
-        model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
+        model: process.env.OPENAI_MODEL || "gemini-2.5-flash",
         input: prompt,
       });
 
-      return response.output_text;
+      return response.output_text || "No response generated";
     } catch (err) {
       if (err.status === 429) {
-        console.log("⚠️ Rate limit hit. Retrying in 2 sec…");
+        console.log("Rate limit hit. Retrying in 2 sec…");
         await new Promise((r) => setTimeout(r, 2000));
         retries--;
       } else {
@@ -45,7 +45,7 @@ ${userContent}
 
     return res.status(200).json({ enhancedContent: enhanced.trim() });
   } catch (error) {
-    console.error("AI Summary Error:", error);
+    console.error("AI Summary Error:", error.message);
     return res.status(500).json({ message: "AI Server Error" });
   }
 };
