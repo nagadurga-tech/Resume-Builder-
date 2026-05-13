@@ -6,18 +6,21 @@ async function safeAIRequest(prompt) {
   let retries = 2;
   while (retries > 0) {
     try {
-      const response = await ai.responses.create({
+      const response = await ai.chat.completions.create({
         model: process.env.OPENAI_MODEL || "gemini-2.5-flash",
-        input: prompt,
+        messages: [
+          { role: "user", content: prompt, },
+        ],
       });
 
-      return response.output_text || "No response generated";
+      return response.choices[0].message.content || "No response generated";
     } catch (err) {
       if (err.status === 429) {
         console.log("Rate limit hit. Retrying in 2 sec…");
         await new Promise((r) => setTimeout(r, 2000));
         retries--;
       } else {
+        console.log(err);
         throw err;
       }
     }
